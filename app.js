@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 
 const https = require('https');
+const { Console } = require('console');
 
 
 const app = express();
@@ -18,6 +20,7 @@ app.post('/', function (req, res) {
     var email = req.body.email;
 
     console.log(fname, lname, email);
+    console.log(process.env.API_KEY);
 
     var data = {
         members: [{
@@ -35,12 +38,12 @@ app.post('/', function (req, res) {
     const url = 'https://us14.api.mailchimp.com/3.0/lists/ef66f51dfa'
     const options = {
         method: "POST",
-        auth: "isaac:0729315397e6a843adc64f1d38ada72a-us14"
+        auth: ""+process.env.API_KEY
     }
 
     const request = https.request(url,options,function(response){
         response.on("data",function(data){
-           // console.log(JSON.parse(data));
+           console.log(JSON.parse(data));
         })
         response.statusCode === 200 ? res.sendFile(__dirname+"/sucess.html") : res.sendFile(__dirname +"/failure.html");
 
